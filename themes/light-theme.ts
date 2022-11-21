@@ -1,5 +1,6 @@
 import { createTheme } from '@mui/material/styles';
 import { red,  } from '@mui/material/colors';
+import shadows from '@mui/material/styles/shadows';
 
 
 export const lightTheme = createTheme({
@@ -10,12 +11,14 @@ export const lightTheme = createTheme({
     },
     secondary: {
       main: '#3A64D8'
-    }
+    },
+    
   },
   components: {
     MuiLink: {
       defaultProps: {
         underline: 'none',
+        
       },
     },
     MuiAppBar: {
@@ -34,7 +37,7 @@ export const lightTheme = createTheme({
     MuiTypography: {
       styleOverrides: {
         h1: {
-          fontSize: 30,
+          fontSize: 36,
           fontWeight: 600
         },
         h2: {
@@ -54,6 +57,7 @@ export const lightTheme = createTheme({
         variant: 'contained',
         size: 'small',
         disableElevation: true,
+        
       },
       styleOverrides: {
         root: {
@@ -61,7 +65,8 @@ export const lightTheme = createTheme({
           boxShadow: 'none',
           borderRadius: 10,
           ":hover": {
-            backgroundColor: 'rgba(0,0,0,0.05)',
+            backgroundColor: 'rgba(0,0,0,0.3)',
+            color:'white',
             transition: 'all 0.3s ease-in-out'
           }
         }
