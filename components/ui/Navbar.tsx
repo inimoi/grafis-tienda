@@ -27,6 +27,7 @@ export const Navbar = () => (
         <NextLink className='none' href='/papeleria'> 
           <Box display='flex' alignItems='center'>
             <Button startIcon={<AddBusiness />}>Tienda papelería</Button>
+            
           </Box>
         </NextLink>
         <NextLink className='none' href='/copisteria'> 

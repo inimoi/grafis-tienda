@@ -1,36 +1,61 @@
-import { Box, Card, CardActionArea, CardMedia, Grid, Typography } from '@mui/material'
+
+import { Box, Card, CardActionArea, CardMedia, Grid, Typography, Button, InputLabel } from '@mui/material';
+import { padding } from '@mui/system';
 import React from 'react'
 import { ShopLayout } from '../../components/layouts'
+import { ProductList } from '../../components/products';
 
 import { initialData } from '../../database/products';
+
 
 
 
 const index = () => {
   return (
     <ShopLayout title='Papelería' pageDescription='Página principal de la papelería'>
-      <Box marginTop='150px'>
+      <Box marginTop='100px'>
         <Typography variant='h1' component='h1'>TIENDA PAPELERIA</Typography>
-        <Typography variant='h2' component='h2'>Todos los productos</Typography>
+        <Box display='block' mt='10px' mb='10px' sx={{ border:'2px solid black', padding:'5px', borderRadius:'5px'}}>
+          <Button>Acuarelas</Button>
+          <Button>Agenda escolar</Button>
+          <Button>Bolígrafos</Button>
+          <Button>Calculadoras</Button>
+          <Button>Carpetas</Button>
+          <Button>Ceras</Button>
+          <Button>Cinta Dymo</Button>
+          <Button>Compases</Button>
+          <Button>Correctores</Button>
+          <Button>Dossiers</Button>
+          <Button>Edding</Button>
+          <Button>Estuches</Button>
+          <Button>Forro  libros</Button>
+          <Button>Fundas</Button>
+          <Button>Gomas de borrar</Button>
+          <Button>Grapadoras</Button>
+          <Button>Lápices</Button>
+          <Button>Libretas</Button>
+          <Button>Marcadores</Button>
+          <Button>Minas</Button>
+          <Button>Pegamentos</Button>
+          <Button>Pendrive</Button>
+          <Button>Plastilina</Button>
+          <Button>Porta planos</Button>
+          <Button>Reglas</Button>
+          <Button>Resmilleria</Button>
+          <Button>Roller pilot</Button>
+          <Button>Rotuladores</Button>
+          <Button>Sacapuntas</Button>
+          <Button>Talonarios</Button>
+          <Button>Tarifarios</Button>
+          <Button>Tijeras</Button>
+
+        </Box>
+          
         
       </Box>
-      <Grid container spacing={4}>
-        {
-            initialData.products.map( product => (
-                <Grid item xs={ 6 } sm={ 4 } key={product.slug}>
-                    <Card>
-                        <CardActionArea>
-                            <CardMedia 
-                                component={'img'}
-                                image={ `products/${ product.images[0]}`} 
-                                alt={ product.title }
-                            />                           
-                        </CardActionArea>
-                    </Card>     
-                </Grid>
-            ))
-        }
-      </Grid>
+      <ProductList 
+        products={ initialData.products as any }
+      />
       
     </ShopLayout>
   )
