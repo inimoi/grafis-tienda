@@ -50,7 +50,7 @@ export const Navbar = () => (
       <IconButton >
         <SearchOutlined/>
       </IconButton>
-      <NextLink className='none' href='/'> 
+      <NextLink className='none' href='/carrito'> 
         <Box display='flex' alignItems='center'>
           <IconButton>
             <Badge badgeContent={2} color={'secondary'}>
