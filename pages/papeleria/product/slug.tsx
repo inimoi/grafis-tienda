@@ -10,19 +10,19 @@ const product = initialData.products[0]
 
 const ProductPage :NextPage= () => {
   return (
-    <ShopLayout title={ product.title } pageDescription={ product.description } >
+    <ShopLayout title={ product.titulo } pageDescription={ product.descripcion } >
       <Grid container spacing={ 3 }>
         <Grid  item xs={ 12 } sm={ 7 }>
           <ProductSlideshow 
-            images={ product.images }
+            imagenes={ product.imagenes }
           />
         </Grid>
         <Grid  item xs={ 12 } sm={ 5 }>
           <Box display= 'flex' flexDirection='column'>
 
             {/* Titulos */}
-            <Typography variant='h1' component='h1'>{ product.title }</Typography>
-            <Typography color='red' variant='subtitle1' component='h2'>{ `${product.price}€` }</Typography>
+            <Typography variant='h1' component='h1'>{ product.titulo }</Typography>
+            <Typography color='red' variant='subtitle1' component='h2'>{ `${product.precio}€` }</Typography>
             
             {/* Cantidad */}
             <Box>
@@ -40,7 +40,7 @@ const ProductPage :NextPage= () => {
           {/* Descipcion */}
           <Box sx={{ mt:3}}>
               <Typography variant='subtitle2' >Descripción</Typography>
-              <Typography variant='body2' >{ product.description }</Typography>
+              <Typography variant='body2' >{ product.descripcion }</Typography>
           </Box>
         </Grid>
       </Grid>
