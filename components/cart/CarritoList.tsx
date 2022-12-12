@@ -27,7 +27,7 @@ export const CarritoList:FC<Props> = ({ editable = false }) => {
                         <Box>
                             <CardActionArea>
                                 <CardMedia 
-                                    image={ `/products/${ product.images[0]}`}
+                                    image={ `/products/${ product.imagenes[0]}`}
                                     component='img'
                                     sx={{ borderRadius: '5px' }}
                                 />
@@ -37,7 +37,7 @@ export const CarritoList:FC<Props> = ({ editable = false }) => {
                 </Grid>
                 <Grid item xs={7}>
                     <Box display='flex' flexDirection='column'>
-                        <Typography variant='body1'>{ product.title }</Typography>
+                        <Typography variant='body1'>{ product.titulo }</Typography>
 
                         {/*  Condicional: que haya usuarios qu eno puedan añadir ni borrar esos elementos*/}
                         {
@@ -49,7 +49,7 @@ export const CarritoList:FC<Props> = ({ editable = false }) => {
                     </Box>
                 </Grid>
                 <Grid item xs={2} display='flex' alignItems='center' flexDirection='column' >
-                    <Typography variant='subtitle1'>{ `${product.price}€`}</Typography>
+                    <Typography variant='subtitle1'>{ `${product.precio}€`}</Typography>
 
                     {/* editable */}
                     {

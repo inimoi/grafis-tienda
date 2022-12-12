@@ -13,6 +13,8 @@ export const ProductCard: FC<Props>= ( { product }) => {
 
     const [ isHovered, setIsHovered ] = useState( false )
 
+    const [ isImageLoaded, setIsImageLoaded ] = useState( false )
+
     const productImage = useMemo(() =>{
         return isHovered
             ?`products/${ product.imagenes[1] }`
@@ -37,13 +39,14 @@ export const ProductCard: FC<Props>= ( { product }) => {
                             className='fadeIn'
                             image={ productImage } 
                             alt={ product.titulo }
+                            onLoad= { () => setIsImageLoaded(true)}
                         />                           
                     </CardActionArea>
                 </Box>
             </NextLink>
         </Card> 
 
-        <Box sx={{ mt: 1}} className='fadeIn'>
+        <Box sx={{ mt: 1, display: isImageLoaded ? 'block' : 'none' }} className='fadeIn'>
             <Typography fontWeight={700}>{ product.titulo }</Typography>
             <Typography fontWeight={400}>{ `$${product.precio}` }</Typography>
         </Box>    

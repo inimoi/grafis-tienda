@@ -1,16 +1,17 @@
 
 import { Box, Card, CardActionArea, CardMedia, Grid, Typography, Button, InputLabel } from '@mui/material';
-import { padding } from '@mui/system';
 import React from 'react'
 import { ShopLayout } from '../../components/layouts'
 import { ProductList } from '../../components/products';
-
-import { initialData } from '../../database/products';
-
+import { FullScreenLoading } from '../../components/ui';
+import { useProducts } from '../../hooks';
 
 
 
 const index = () => {
+
+  const { products, isLoading } = useProducts('/products')                 //el custom hook de SWR que hemos creado para traer los productos
+
   return (
     <ShopLayout title='Papelería' pageDescription='Página principal de la papelería'>
       <Box marginTop='100px'>
@@ -53,9 +54,14 @@ const index = () => {
           
         
       </Box>
-      <ProductList 
-        products={ initialData.products as any }
-      />
+
+      {
+          isLoading
+          ? <FullScreenLoading />
+          : <ProductList products={ products }/>
+
+      }
+     
       
     </ShopLayout>
   )
