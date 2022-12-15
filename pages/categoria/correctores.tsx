@@ -10,14 +10,14 @@ import { NextPage } from 'next';
 
 
 
-const PapeleriaPage: NextPage = () => {
+const CorrectoresPage: NextPage = () => {
 
-  const { products, isLoading } = useProducts('/products')                 //el custom hook de SWR que hemos creado para traer los productos
+  const { products, isLoading } = useProducts('/products?categoria=Correctores')                 //el custom hook de SWR que hemos creado para traer los productos
 
   return (
-    <ShopLayout title='Papelería' pageDescription='Página principal de la papelería'>
+    <ShopLayout title='Papelería - Correctores' pageDescription='Página correctores de la papelería'>
       <Box marginTop='100px'>
-        <Typography variant='h1' component='h1'>TIENDA PAPELERIA</Typography>
+        <Typography variant='h1' component='h1'>TIENDA PAPELERIA - CORRECTORES</Typography>
         <Grid container  columnSpacing={1} mt='20px'>
           <Grid item display='flex' flexDirection='column' xs={3.5} sm={2} md={1.5} >
               
@@ -238,4 +238,4 @@ const PapeleriaPage: NextPage = () => {
   )
 }
 
-export default PapeleriaPage
+export default CorrectoresPage;

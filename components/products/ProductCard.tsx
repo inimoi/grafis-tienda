@@ -17,15 +17,15 @@ export const ProductCard: FC<Props>= ( { product }) => {
 
     const productImage = useMemo(() =>{
         return isHovered
-            ?`products/${ product.imagenes[1] }`
-            :`products/${ product.imagenes[0] }`
+            ?`/products/${ product.imagenes[1] }`
+            :`/products/${ product.imagenes[0] }`
 
     }, [isHovered, product.imagenes ])
 
   return (
     <Grid item 
-        xs={ 6 } 
-        sm={ 4 } 
+        xs={ 12 } 
+        sm={ 6 } 
         md={ 2 } 
         onMouseEnter={ () => setIsHovered(true)} /* con la propiedad esta nos indica cuand el mouse entra en el araea epecificada */
         onMouseLeave={ () => setIsHovered(false)} /* con la propiedad esta nos indica cuand el mouse esta fuera del araea epecificada */

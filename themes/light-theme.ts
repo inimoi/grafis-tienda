@@ -12,7 +12,7 @@ export const lightTheme = createTheme({
     secondary: {
       main: '#3A64D8'
     },
-    
+        
   },
   components: {
     MuiLink: {

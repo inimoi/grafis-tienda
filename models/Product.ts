@@ -13,7 +13,7 @@ const productSchema = new Schema({
     categoria: {
         type: String,
         enum: {
-            values:['Acuarelas','Agenda escolar','Boligrafos','Calculadoras'],
+            values:['Acuarelas','Agenda escolar','Boligrafos','Calculadoras','Carpetas','Ceras','Cinta Dymo','Compases','Correctores','Dossiers','Edding','Estuches','Forro libros','Fundas','Gomas de borrar','Grapadoras','Lapices','Libretas','Marcadores','Minas','Pegamentos','Pendrive','Plastilina','Porta planos','Reglas','Resmilleria','Roller pilot','Rotuladores','Sacapuntas','Talonarios','Tarifarios','Tijeras'],
             message: '{VALUE} no es una categoria válida'
         }
     }
