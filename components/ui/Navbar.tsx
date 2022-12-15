@@ -4,12 +4,15 @@ import { AddBusiness, Article, ContactPage, DesignServices, SearchOffRounded, Se
 import { AppBar,Autocomplete,Badge,Box,Button,Grid,IconButton,Link,Toolbar, Typography } from '@mui/material'
 import NextLink from 'next/link'
 import { useRouter } from 'next/router'
-import React from 'react'
+import React, { useContext } from 'react'
+import { UiContext } from '../../context'
 
 export const Navbar = () => {
 
   const { asPath } = useRouter();
-  console.log({asPath})
+  
+  const { toggleSideMenu } = useContext(UiContext)
+
   return (
     <AppBar>
       <Toolbar >
@@ -63,7 +66,7 @@ export const Navbar = () => {
             </IconButton>
           </Box>
         </NextLink>
-        <Button sx={{ fontSize:18, ml:5}}>
+        <Button sx={{ fontSize:18, ml:5}} onClick={ toggleSideMenu }>
           Menu
         </Button> 
         

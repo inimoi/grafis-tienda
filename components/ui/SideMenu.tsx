@@ -1,13 +1,27 @@
 import { Box, Divider, Drawer, IconButton, Input, InputAdornment, List, ListItem, ListItemIcon, ListItemText, ListSubheader } from "@mui/material"
 import { AccountCircleOutlined, AdminPanelSettings, CategoryOutlined, ConfirmationNumberOutlined, EscalatorWarningOutlined, FemaleOutlined, LoginOutlined, MaleOutlined, SearchOutlined, VpnKeyOutlined } from "@mui/icons-material"
+import { useContext } from "react"
+import { UiContext } from "../../context"
+import { useRouter } from "next/router"
 
 
 export const SideMenu = () => {
+
+    const { isMenuOpen, toggleSideMenu} = useContext(UiContext);
+
+    const router = useRouter();
+
+    const navigateTo = ( url: string ) => {
+        toggleSideMenu();
+        router.push(url);
+    }
+
   return (
     <Drawer
-        open={ false }
+        open={ isMenuOpen }
         anchor='right'
         sx={{ backdropFilter: 'blur(4px)', transition: 'all 0.5s ease-out' }}
+        onClose={ toggleSideMenu }
     >
         <Box sx={{ width: 250, paddingTop: 5 }}>
             
@@ -44,27 +58,60 @@ export const SideMenu = () => {
                 </ListItem>
 
 
-                <ListItem button sx={{ display: { xs: '', sm: 'none' } }}>
+                <ListItem 
+                    button 
+                    sx={{ display: { xs: '', sm: 'none' } }}
+                    onClick={ ()=> navigateTo('/')}
+                    >
                     <ListItemIcon>
                         <MaleOutlined/>
                     </ListItemIcon>
-                    <ListItemText primary={'Hombres'} />
+                    <ListItemText primary={'Inicio'} />
                 </ListItem>
 
-                <ListItem button sx={{ display: { xs: '', sm: 'none' } }}>
+                <ListItem 
+                    button 
+                    sx={{ display: { xs: '', sm: 'none' } }}
+                    onClick={ ()=> navigateTo('/papeleria')}
+                    >
                     <ListItemIcon>
                         <FemaleOutlined/>
                     </ListItemIcon>
-                    <ListItemText primary={'Mujeres'} />
+                    <ListItemText primary={'Tienda papelería'} />
                 </ListItem>
 
-                <ListItem button sx={{ display: { xs: '', sm: 'none' } }}>
+                <ListItem 
+                    button 
+                    sx={{ display: { xs: '', sm: 'none' } }}
+                    onClick={ ()=> navigateTo('/copisteria')}
+                    >
                     <ListItemIcon>
                         <EscalatorWarningOutlined/>
                     </ListItemIcon>
-                    <ListItemText primary={'Niños'} />
+                    <ListItemText primary={'Copistería'} />
                 </ListItem>
 
+                <ListItem 
+                    button 
+                    sx={{ display: { xs: '', sm: 'none' } }}
+                    onClick={ ()=> navigateTo('contacto')}
+                    >
+                    <ListItemIcon>
+                        <EscalatorWarningOutlined/>
+                    </ListItemIcon>
+                    <ListItemText primary={'Contacto'} />
+                </ListItem>
+
+                <ListItem 
+                    button 
+                    sx={{ display: { xs: '', sm: 'none' } }}
+                    onClick={ ()=> navigateTo('servicios')}
+                    >
+                    <ListItemIcon>
+                        <EscalatorWarningOutlined/>
+                    </ListItemIcon>
+                    <ListItemText primary={'Servicios'} />
+                </ListItem>
 
                 <ListItem button>
                     <ListItemIcon>
