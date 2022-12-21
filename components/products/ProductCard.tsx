@@ -17,7 +17,7 @@ export const ProductCard: FC<Props>= ( { product }) => {
 
     const productImage = useMemo(() =>{
         return isHovered
-            ?`/products/${ product.imagenes[1] }`
+            ?`/products/${ product.imagenes[0] }`
             :`/products/${ product.imagenes[0] }`
 
     }, [isHovered, product.imagenes ])
@@ -31,7 +31,7 @@ export const ProductCard: FC<Props>= ( { product }) => {
         onMouseLeave={ () => setIsHovered(false)} /* con la propiedad esta nos indica cuand el mouse esta fuera del araea epecificada */
         >
         <Card>
-            <NextLink href="papeleria/product/slug" passHref prefetch={ false } >
+            <NextLink href={ `/papeleria/product/${ product.slug }` } passHref prefetch={ false } > 
                 <Box>
                     <CardActionArea>
                         <CardMedia
