@@ -1,33 +1,41 @@
-import React, { FC } from 'react';
+import React, { FC, Fragment, useContext} from 'react';
 import NextLink from 'next/link'
 import { Box, Button, CardActionArea, CardMedia, Grid, Typography } from '@mui/material'
 
-import { initialData } from '../../database/products'
 import { ItemCounter } from '../ui';
+import { CarritoContext } from '../../context/carrito/CarritoContext';
+import { ICarritoProduct } from '../../interfaces';
 
-const productsInCart = [
 
-    initialData.products[1],
-    initialData.products[2],
-    initialData.products[3],
-]
+
 
 interface Props{
     editable?: boolean;
 }
 
 export const CarritoList:FC<Props> = ({ editable = false }) => {
+
+    const { carrito, updateCarritoCantidad, eliminarCarritoProducto } =  useContext(CarritoContext);
+
+
+    //creamos la fuuncion para realizar el cambio de la cantidad
+    const onNewCartQuantityValue = ( product: ICarritoProduct, newQuantityValue: number) => {
+        product.cantidad = newQuantityValue;
+        updateCarritoCantidad( product )
+    }
+
+
   return (
-    <>
+    <Fragment>
       {
-        productsInCart.map( product =>(
+        carrito.map ( product =>(
             <Grid container spacing={2} key={ product.slug} sx={{ mb:1}}>
                 <Grid item xs={3}>
-                    <NextLink href='/papeleria/product/slug' passHref>
+                    <NextLink href={ `/papeleria/product/${ product.slug }`} passHref>
                         <Box>
                             <CardActionArea>
                                 <CardMedia 
-                                    image={ `/products/${ product.imagenes[0]}`}
+                                    image={ `/products/${ product.imagenes}`}
                                     component='img'
                                     sx={{ borderRadius: '5px' }}
                                 />
@@ -42,8 +50,12 @@ export const CarritoList:FC<Props> = ({ editable = false }) => {
                         {/*  Condicional: que haya usuarios qu eno puedan añadir ni borrar esos elementos*/}
                         {
                             editable
-                            ? <ItemCounter />
-                            : <Typography variant='h5' >3 items</Typography>
+                            ? <ItemCounter 
+                                    currentValue={product.cantidad}
+                                    updatedQuantity={( newValue )=> onNewCartQuantityValue( product, newValue )}
+                            
+                            />
+                            : <Typography variant='h5' >{ product.cantidad } { product.cantidad>1 ? 'productos' : 'producto'}</Typography>
                         }
                         
                     </Box>
@@ -54,7 +66,11 @@ export const CarritoList:FC<Props> = ({ editable = false }) => {
                     {/* editable */}
                     {
                         editable && (
-                            <Button variant='text' color='secondary'>
+                            <Button 
+                                onClick={ () => eliminarCarritoProducto( product )}
+                                variant='text' 
+                                color='secondary'
+                                >
                                 Eliminar artículo
                             </Button>
                         )
@@ -65,7 +81,7 @@ export const CarritoList:FC<Props> = ({ editable = false }) => {
 
         ))
       }
-    </>
+    </Fragment>
   )
 }
 

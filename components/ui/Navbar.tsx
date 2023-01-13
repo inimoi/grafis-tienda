@@ -5,13 +5,16 @@ import { AppBar,Autocomplete,Badge,Box,Button,Grid,IconButton,Input,InputAdornme
 import NextLink from 'next/link'
 import {  useRouter } from 'next/router'
 import React, { useContext, useState } from 'react'
-import { UiContext } from '../../context'
+import { UiContext , CarritoContext} from '../../context'
+
 
 export const Navbar = () => {
 
   const { asPath, push } = useRouter();
   
   const { toggleSideMenu } = useContext(UiContext);
+
+  const { numberOfItems } = useContext(CarritoContext);
 
   
   const [ searchTerm, setSearchTerm ] = useState('')
@@ -122,7 +125,7 @@ export const Navbar = () => {
         <NextLink className='none' href='/carrito'> 
           <Box display='flex' alignItems='center'>
             <IconButton>
-              <Badge badgeContent={2} color={'secondary'}>
+              <Badge badgeContent={ numberOfItems } color={'secondary'}>
                 <ShoppingCartOutlined />
               </Badge>
             </IconButton>

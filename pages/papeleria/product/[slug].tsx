@@ -1,13 +1,19 @@
-import { Grid, Box, Typography, Button, Chip } from '@mui/material';
+import { useContext, useState } from 'react';
+
 import { NextPage } from 'next';
 import { GetStaticPaths, GetStaticProps } from 'next'
+import { useRouter } from 'next/router';
+
+import { CarritoContext } from '../../../context/carrito/CarritoContext';
+
+import { Grid, Box, Typography, Button, Chip } from '@mui/material';
 
 
 import { ShopLayout } from '../../../components/layouts/ShopLayout';
 import { ProductSlideshow } from '../../../components/products';
 import { ItemCounter } from '../../../components/ui';
 import { dbProducts } from '../../../database';
-import { IProduct } from '../../../interfaces';
+import { ICarritoProduct, IProduct } from '../../../interfaces';
 
 
 
@@ -19,8 +25,33 @@ interface Props {
 
 const ProductPage: NextPage<Props> = ({ product }) => {
 
+  const router = useRouter();
+
+  const { addProductToCarrito } = useContext( CarritoContext );      //contexto de carrito
+
+  const [ tempCarritoProduct, setTempCarritoProduct ] = useState<ICarritoProduct>({
+    _id: product._id,
+    imagenes: product.imagenes[0],
+    precio: product.precio,
+    slug: product.slug,
+    titulo: product.titulo,
+    categoria: product.categoria,
+    cantidad: 1,
+  })
   
-  
+  const onUpdateQuantity = ( cantidad: number) => {
+    setTempCarritoProduct( currentProduct => ({
+      ...currentProduct,
+      cantidad
+    }));
+  }
+
+  const onAddProduct = () => {
+
+    //llamar la acción de context para agregar al carrito
+    addProductToCarrito( tempCarritoProduct);
+    router.push('/carrito');
+  }
 
   return (
     <ShopLayout title={ product.titulo } pageDescription={ product.descripcion } >
@@ -40,14 +71,21 @@ const ProductPage: NextPage<Props> = ({ product }) => {
             {/* Cantidad */}
             <Box>
               <Typography variant='subtitle2' >Cantidad</Typography>
-              <ItemCounter />
+              <ItemCounter 
+                currentValue={ tempCarritoProduct.cantidad }
+                updatedQuantity={ onUpdateQuantity }             
+              
+              />
             </Box>
 
             {/* Agregar al carrito  */}
-            <Button color='secondary' className='circular-btn'>Agregar al carrito</Button>
+            {
+              (product.enStock > 0)     //Cuando no hay producto el chip y sino el boton
+              ? <Button onClick={ onAddProduct } color='secondary' className='circular-btn'>Agregar al carrito</Button>
+              : <Chip label='No hay disponibles' color='error' variant='outlined'></Chip>
+            }         
+                        
             
-            
-            <Chip label='No hay disponibles' color='error' variant='outlined'></Chip>
           </Box>
 
           {/* Descipcion */}
