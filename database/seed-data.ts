@@ -1,3 +1,6 @@
+import bcrypt  from 'bcryptjs';
+
+
 interface SeedProduct {
 
     descripcion: string;
@@ -13,14 +16,38 @@ interface SeedProduct {
 
 type ValidCategorias = 'Acuarelas'|'Agenda escolar'|'Boligrafos'|'Calculadoras';
 
+interface SeedUser {
+    name: string;
+    email: string;
+    password: string;
+    role: 'admin' | 'cliente';
+}
+
+
 interface SeedData {
-    products: SeedProduct[],
+    users: SeedUser[];
+    products: SeedProduct[];
 }
 
 
 
 
 export const initialData: SeedData = {
+    users: [
+        {
+            name: 'Iñigo Miranda',
+            email: 'inigo@google.com',
+            password: bcrypt.hashSync('123456'),
+            role: 'admin',
+        },
+        {
+            name: 'Fernando Herrera',
+            email: 'fernando@google.com',
+            password: bcrypt.hashSync('123456'),
+            role: 'cliente',
+        },
+
+    ],
     products: [
         {
             descripcion: "Acuarelas de 18 colores de la marca Jovi.",
