@@ -47,8 +47,9 @@ const LoginPage: NextPage = () => {
             return;
         }
 
-       // navegar a la pantall que el usuario estaba
-        router.replace('/');
+        // navegar a la pantall que el usuario estaba
+        const destination = router.query.p?.toString() || '/';
+        router.replace( destination );
     }
 
 
@@ -110,7 +111,9 @@ const LoginPage: NextPage = () => {
                             </Button> 
                         </Grid>
                         <Grid item xs={12} display='flex' justifyContent='end'>
-                            <NextLink href='/auth/registro' passHref>
+                            <NextLink 
+                                href={ router.query.p ? `/auth/registro?p=${ router.query.p }`: '/auth/registro'} 
+                                passHref>
                                 <Box color='black'>
                                     ¿Aún no tienes cuenta?
                                 </Box>

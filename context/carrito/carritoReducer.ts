@@ -1,5 +1,5 @@
 
-import { CarritoState } from './';
+import { CarritoState, ShippingAddress } from './';
 import { ICarritoProduct } from '../../interfaces';
 
 
@@ -9,6 +9,8 @@ type CarritoActionType =
     | { type: '[Carrito] - Update products in cart', payload: ICarritoProduct[]}
     | { type: '[Carrito] - Change cart quantity', payload: ICarritoProduct}
     | { type: '[Carrito] - Remove product in cart', payload: ICarritoProduct}
+    | { type: '[Carrito] - LoadAddress from Cookies', payload: ShippingAddress}
+    | { type: '[Carrito] - Update Address', payload: ShippingAddress}
     | {
         type: '[Carrito] - Update order summary' ,
         payload: {
@@ -27,6 +29,7 @@ export const carritoReducer = ( state: CarritoState, action: CarritoActionType )
         case '[Carrito] - LoadCart from cookies | storage':
             return {
                 ...state,
+                isLoaded: true,
                 carrito: [...action.payload]
             }
             
@@ -58,6 +61,18 @@ export const carritoReducer = ( state: CarritoState, action: CarritoActionType )
                 ...state,
                 ...action.payload
             }
+
+        case '[Carrito] - LoadAddress from Cookies':
+            return {
+                ...state,
+                shippingAddress: action.payload
+            } 
+
+        case '[Carrito] - Update Address':
+            return {
+                ...state,
+                shippingAddress: action.payload
+            }        
         
         default:
             return state

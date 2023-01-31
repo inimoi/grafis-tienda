@@ -1,5 +1,6 @@
 
 import { FC, useEffect, useReducer } from 'react';
+import { useRouter } from 'next/router';
 
 import axios from 'axios';
 import Cookies from 'js-cookie';
@@ -30,6 +31,9 @@ export const AuthProvider: FC<Props>= ( { children } ) => {
 
     const [ state, dispatch ] = useReducer( authReducer, AUTH_INITIAL_STATE);
 
+    //cogemos un useRouter de next para el logout
+    const router = useRouter();
+
     //useEfecct de la persitencia del token, no le vamos a poner dependencias por lo que solo se va a disparar solo una vez
     useEffect( () => {
         checkToken();
@@ -37,6 +41,12 @@ export const AuthProvider: FC<Props>= ( { children } ) => {
 
     //funcion para la persitencia del token
     const checkToken = async () => {
+
+        //sino hay cookies,  la función no hace nada, así no hacemos trabajar al backen
+        if (!Cookies.get('token')) {
+            return;
+        }
+
         try {
             const { data } = await grafisApi.get('/user/validate-token');
             const { token, user } = data;
@@ -94,6 +104,24 @@ export const AuthProvider: FC<Props>= ( { children } ) => {
         }
     }
 
+    const logout = () => {
+        Cookies.remove('token');
+        Cookies.remove('carrito');
+
+
+        Cookies.remove('nombre');
+        Cookies.remove('apellido');
+        Cookies.remove('direccion');
+        Cookies.remove('direccion2');
+        Cookies.remove('codigoPostal');
+        Cookies.remove('ciudad');
+        Cookies.remove('provincia');
+        Cookies.remove('telefono');
+
+        //es como hacer un refesh y perdemos todos los estADOS DE NUESTRA APLICACIÓN
+        router.reload();
+    }
+
     return (
         <AuthContext.Provider value={{
             ...state,
@@ -101,6 +129,7 @@ export const AuthProvider: FC<Props>= ( { children } ) => {
             //metodos
             loginUser,
             registerUser,
+            logout,
         }}>
             { children }
         </AuthContext.Provider>    

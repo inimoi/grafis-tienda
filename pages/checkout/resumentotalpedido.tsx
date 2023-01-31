@@ -1,12 +1,25 @@
-import { Button, Card, CardContent, Divider, Grid, Typography } from '@mui/material';
-import { Box } from '@mui/system';
+import React, { useContext } from 'react'
 import { NextPage } from 'next'
 import NextLink from 'next/link'
-import React from 'react'
+
+import { Button, Card, CardContent, Divider, Grid, Typography } from '@mui/material';
+import { Box } from '@mui/system';
+
 import { CarritoList, PedidoResumen } from '../../components/cart';
 import { ShopLayout } from '../../components/layouts/ShopLayout';
+import { CarritoContext } from '../../context';
 
 const ResumenTotalPedidoPage : NextPage = () => {
+
+  const { shippingAddress, numberOfItems } = useContext(CarritoContext);
+
+  if (!shippingAddress) {
+    return <></>
+  }
+
+  const { nombre, apellido, direccion, direccion2 = '', ciudad, provincia, codigoPostal, telefono} = shippingAddress;
+
+
   return (
     <ShopLayout title='Resumen de compra' pageDescription='Resumen total de la compra'>
       <Typography variant='h1' component='h1'>Resumen del pedido</Typography>
@@ -19,7 +32,7 @@ const ResumenTotalPedidoPage : NextPage = () => {
         <Grid item xs={ 12 } sm={ 5 } >
             <Card>
                 <CardContent>
-                    <Typography variant='h2' >Resumen (3 productos)</Typography>
+                    <Typography variant='h2' >Resumen ({ numberOfItems} { numberOfItems === 1 ? 'producto': 'productos'})</Typography>
                     <Divider sx={{ my:1 }} />
 
                     <Box display='flex' justifyContent='space-between'>
@@ -31,11 +44,11 @@ const ResumenTotalPedidoPage : NextPage = () => {
                       </NextLink>
                     </Box>
 
-                    <Typography>Iñigo Miranda</Typography>
-                    <Typography>Algun lugar</Typography>
-                    <Typography>direccion</Typography>
-                    <Typography>ccaa</Typography>
-                    <Typography>Iñigo Miranda</Typography>
+                    <Typography>{ nombre } { apellido }</Typography>
+                    <Typography>{ direccion} { direccion2 ? `, ${ direccion2 }`: ' '}</Typography>
+                    <Typography>{ ciudad }, { provincia}</Typography>
+                    <Typography>{ codigoPostal}</Typography>
+                    <Typography>{ telefono }</Typography>
 
                     <Divider sx={{ my:1 }} />
                     <Box display='flex' justifyContent='space-between'>
