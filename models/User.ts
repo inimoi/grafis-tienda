@@ -1,5 +1,4 @@
 
-import { timeStamp } from 'console';
 import mongoose, {Schema, model, Model} from 'mongoose';
 import { IUser } from '../interfaces';
 
