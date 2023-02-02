@@ -1,5 +1,7 @@
 import React, { useContext, useState } from 'react'
 import { NextPage } from 'next'
+import { GetServerSideProps } from 'next'
+import { signIn, getSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import NextLink from 'next/link'
 
@@ -50,10 +52,12 @@ const RegistroPage: NextPage = () => {
         }
 
         // navegar a la pantall que el usuario estaba
-        const destination = router.query.p?.toString() || '/';
-        router.replace( destination );
+        /* const destination = router.query.p?.toString() || '/';
+        router.replace( destination ); */
 
-        
+        //ya está creado el usuario y le mandamos que se loeguee con next aut
+        await signIn('credentials', { email, password});
+
     }
 
     return (
@@ -144,5 +148,30 @@ const RegistroPage: NextPage = () => {
         </AuthLayout>
     )
     }
+
+
+
+export const getServerSideProps: GetServerSideProps = async ({ req, query }) => {
+    
+    const session = await getSession({ req });
+
+    const { p = '/'}= query;
+
+    if ( session ) {
+        return {
+            redirect: {
+                destination: p.toString(),
+                permanent: false
+            }
+        }
+    }
+
+    return {
+        props: {
+            
+        }
+    }
+}
+
 
 export default RegistroPage

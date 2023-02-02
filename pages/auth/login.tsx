@@ -1,16 +1,18 @@
-import React, { useState, useContext } from 'react'
+import React, { useEffect, useState } from 'react'
 import { NextPage } from 'next'
+import { GetServerSideProps } from 'next'
 import { useRouter } from 'next/router'
+import { signIn, getSession, getProviders } from 'next-auth/react'
 
 import NextLink from 'next/link'
-import { Box, Button, Chip, Grid, TextField, Typography } from '@mui/material'
+import { Box, Button, Chip, Divider, Grid, TextField, Typography } from '@mui/material'
 import { ErrorOutline } from '@mui/icons-material'
 
-import { AuthContext } from '../../context'
+//import { AuthContext } from '../../context'
 import AuthLayout from '../../components/layouts/AuthLayout'
 import { useForm } from 'react-hook-form'
 import { validations } from '../../utils'
-import { grafisApi } from '../../api'
+
 
 
 
@@ -25,7 +27,7 @@ const LoginPage: NextPage = () => {
     const router = useRouter()
 
     //llamada al AuthContext
-    const { loginUser } = useContext( AuthContext);
+    //const { loginUser } = useContext( AuthContext);
 
     //descripcion del react-hook-form
     const { register, handleSubmit, formState: { errors } } = useForm<FormData>();  
@@ -33,12 +35,23 @@ const LoginPage: NextPage = () => {
     //estado de los errores de autenticacion
     const [ showError, setShowError ] = useState(false);
 
+    //usestate para los providers de next-authporque getprovider es una promesa
+    const [ providers, setProviders ] = useState<any>({});
+
+    useEffect(() => {
+        getProviders().then( prov => {
+            
+            setProviders( prov);
+        })
+
+    }, [])
 
     const onLoginUser = async ( { email, password}: FormData ) => {
         
         setShowError(false);
 
-        const isValidLogin = await loginUser( email, password );
+        //este era el código de nuestra utenticacion personalizada
+        /* const isValidLogin = await loginUser( email, password );
 
         if ( !isValidLogin) {
             setShowError(true);
@@ -49,7 +62,10 @@ const LoginPage: NextPage = () => {
 
         // navegar a la pantall que el usuario estaba
         const destination = router.query.p?.toString() || '/';
-        router.replace( destination );
+        router.replace( destination ); */
+
+        //este es con el next-auth
+        await signIn('credentials', { email, password }) ;
     }
 
 
@@ -119,6 +135,32 @@ const LoginPage: NextPage = () => {
                                 </Box>
                             </NextLink> 
                         </Grid>
+
+                        
+                        <Grid item xs={12} display='flex' direction={'column'} justifyContent='end'>
+                         
+                                <Divider sx={{ width:'100%', mb: 2}} />
+                                {
+                                    Object.values( providers ).map(( provider:any) => {
+
+                                        if ( provider.id === 'credentials') return (<div key='credentials'></div>);
+                                        return (
+                                            <Button
+                                                key={ provider.id}
+                                                variant="outlined"
+                                                fullWidth
+                                                color='primary'
+                                                sx={{ mb:1}}
+                                                onClick={ () => signIn( provider.id )}
+                                            >
+                                                { provider.name }
+                                            </Button>
+                                        )
+                                    })
+                                }
+                            
+                            
+                        </Grid>
                     </Grid>
                 </Box>
             </form>
@@ -126,6 +168,31 @@ const LoginPage: NextPage = () => {
                 
     </AuthLayout>
   )
+}
+
+// You should use getServerSideProps when:
+// - Only if you need to pre-render a page whose data must be fetched at request time
+
+
+export const getServerSideProps: GetServerSideProps = async ({ req, query }) => {
+    const session = await getSession({ req });
+
+    const { p = '/'}= query;
+
+    if ( session ) {
+        return {
+            redirect: {
+                destination: p.toString(),
+                permanent: false
+            }
+        }
+    }
+
+    return {
+        props: {
+            
+        }
+    }
 }
 
 export default LoginPage

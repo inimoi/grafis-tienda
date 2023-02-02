@@ -1,5 +1,6 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { NextPage } from 'next'
+import { useRouter } from 'next/router';
 import NextLink from 'next/link'
 
 import { Button, Card, CardContent, Divider, Grid, Typography } from '@mui/material';
@@ -8,10 +9,23 @@ import { Box } from '@mui/system';
 import { CarritoList, PedidoResumen } from '../../components/cart';
 import { ShopLayout } from '../../components/layouts/ShopLayout';
 import { CarritoContext } from '../../context';
+import Cookies from 'js-cookie';
+
+
 
 const ResumenTotalPedidoPage : NextPage = () => {
 
+  const router = useRouter();
+
   const { shippingAddress, numberOfItems } = useContext(CarritoContext);
+
+  //useEffect para evitar entrr en la pagina sin que haya direccion
+  useEffect(() => {
+    if ( !Cookies.get('apellido')) {
+      router.push('/checkout/direccion')
+    }
+  }, [ router ]);
+
 
   if (!shippingAddress) {
     return <></>

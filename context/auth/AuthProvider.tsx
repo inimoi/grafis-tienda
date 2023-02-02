@@ -1,6 +1,7 @@
 
 import { FC, useEffect, useReducer } from 'react';
 import { useRouter } from 'next/router';
+import { useSession, signOut } from 'next-auth/react';
 
 import axios from 'axios';
 import Cookies from 'js-cookie';
@@ -34,10 +35,23 @@ export const AuthProvider: FC<Props>= ( { children } ) => {
     //cogemos un useRouter de next para el logout
     const router = useRouter();
 
+    //Hook del next-auth
+    const { data, status} = useSession();
+
+    // useEffect para el next-auth
+    useEffect(() => {
+
+        if ( status === 'authenticated') {
+            console.log({ user: data?.user});
+            dispatch({ type: '[Auth] - Login', payload: data?.user as IUser})
+        }
+    },[ status, data ])
+
+    //lo comento porque ahora vamos autilizar el token de next-auth
     //useEfecct de la persitencia del token, no le vamos a poner dependencias por lo que solo se va a disparar solo una vez
-    useEffect( () => {
+   /*  useEffect( () => {
         checkToken();
-    }, [])
+    }, []) */
 
     //funcion para la persitencia del token
     const checkToken = async () => {
@@ -105,7 +119,8 @@ export const AuthProvider: FC<Props>= ( { children } ) => {
     }
 
     const logout = () => {
-        Cookies.remove('token');
+
+        //Cookies.remove('token');
         Cookies.remove('carrito');
 
 
@@ -118,8 +133,9 @@ export const AuthProvider: FC<Props>= ( { children } ) => {
         Cookies.remove('provincia');
         Cookies.remove('telefono');
 
+        signOut();
         //es como hacer un refesh y perdemos todos los estADOS DE NUESTRA APLICACIÓN
-        router.reload();
+        //router.reload();
     }
 
     return (

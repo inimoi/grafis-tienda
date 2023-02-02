@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {useContext} from 'react';
 import { NextPage } from 'next'
 import { useForm } from 'react-hook-form';
@@ -41,6 +41,17 @@ const direccionPage : NextPage = () => {
 
     //llamada al UseRouter de next
     const router = useRouter();
+
+   
+
+    //useEffect para evitar entrr en la pagina sin que haya datos en el carrito
+    useEffect(() => {
+        if ( !Cookies.get('carrito')) {
+            router.push('/papeleria')
+    }
+  }, [ router ]);
+
+  
 
     //llamamos al carritoContext para actualizar la direccion
     const { updateAddress } = useContext(CarritoContext);

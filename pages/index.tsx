@@ -1,10 +1,12 @@
 import type { NextPage } from 'next';
+
 import { Typography } from '@mui/material';
 
 import { ShopLayout } from '../components/layouts';
 
 
 const Home: NextPage = () => {
+
   return (
    <ShopLayout title={'Grafis - Home'} pageDescription={'Página de inicio de Grafis'}>
     {/* el component es para el SEO de google para que vea que es un titulo*/}
