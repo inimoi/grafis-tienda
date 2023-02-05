@@ -5,7 +5,7 @@ import shadows from '@mui/material/styles/shadows';
 
 export const lightTheme = createTheme({
   palette: {
-    mode: 'light',
+    mode: "light",     
     primary: {
       main: '##1E1E1E'
     },

@@ -4,7 +4,7 @@ import { NextPage } from 'next'
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 
-import { Box, Button, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material';
+import { Box, Button, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Typography} from '@mui/material';
 import Cookies from 'js-cookie';
 
 import { ShopLayout } from '../../components/layouts/ShopLayout';
@@ -90,6 +90,9 @@ const direccionPage : NextPage = () => {
                             error={ !!errors.nombre}
                             helperText={ errors.nombre?.message}
                             />
+
+                            
+                        
                     </Grid>
 
                     <Grid item xs={ 12 } sm={ 6 } >
