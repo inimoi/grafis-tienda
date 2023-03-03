@@ -196,3 +196,6 @@ export const getServerSideProps: GetServerSideProps = async ({ req, query }) => 
 }
 
 export default LoginPage
+
+import type { NextApiRequest, NextApiResponse } from 'next'
+

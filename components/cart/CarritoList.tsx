@@ -5,15 +5,17 @@ import { Box, Button, CardActionArea, CardMedia, Grid, Typography } from '@mui/m
 import { ItemCounter } from '../ui';
 import { CarritoContext } from '../../context/carrito/CarritoContext';
 import { ICarritoProduct } from '../../interfaces';
+import { IPedidoItem } from '../../interfaces/pedido';
 
 
 
 
 interface Props{
     editable?: boolean;
+    productos?: IPedidoItem[];
 }
 
-export const CarritoList:FC<Props> = ({ editable = false }) => {
+export const CarritoList:FC<Props> = ({ editable = false, productos }) => {
 
     const { carrito, updateCarritoCantidad, eliminarCarritoProducto } =  useContext(CarritoContext);
 
@@ -24,64 +26,66 @@ export const CarritoList:FC<Props> = ({ editable = false }) => {
         updateCarritoCantidad( product )
     }
 
+    //como estamos reutilizando este componnete en varios sitios, tenemos que ver sii vienen los productos del baackend del pedido
+    const productosToShow = productos ? productos: carrito;
 
-  return (
-    <Fragment>
-      {
-        carrito.map ( product =>(
-            <Grid container spacing={2} key={ product.slug} sx={{ mb:1}}>
-                <Grid item xs={3}>
-                    <NextLink href={ `/papeleria/product/${ product.slug }`} passHref>
-                        <Box>
-                            <CardActionArea>
-                                <CardMedia 
-                                    image={ `/products/${ product.imagenes}`}
-                                    component='img'
-                                    sx={{ borderRadius: '5px' }}
+    return (
+        <Fragment>
+        {
+            productosToShow.map ( product =>(
+                <Grid container spacing={2} key={ product.slug} sx={{ mb:1}}>
+                    <Grid item xs={3}>
+                        <NextLink href={ `/papeleria/product/${ product.slug }`} passHref>
+                            <Box>
+                                <CardActionArea>
+                                    <CardMedia 
+                                        image={ `/products/${ product.image}`}
+                                        component='img'
+                                        sx={{ borderRadius: '5px' }}
+                                    />
+                                </CardActionArea>
+                            </Box>
+                        </NextLink>
+                    </Grid>
+                    <Grid item xs={7}>
+                        <Box display='flex' flexDirection='column'>
+                            <Typography variant='body1'>{ product.titulo }</Typography>
+
+                            {/*  Condicional: que haya usuarios qu eno puedan añadir ni borrar esos elementos*/}
+                            {
+                                editable
+                                ? <ItemCounter 
+                                        currentValue={product.cantidad}
+                                        updatedQuantity={( newValue )=> onNewCartQuantityValue( product as ICarritoProduct, newValue )}
+                                
                                 />
-                            </CardActionArea>
-                        </Box>
-                    </NextLink>
-                </Grid>
-                <Grid item xs={7}>
-                    <Box display='flex' flexDirection='column'>
-                        <Typography variant='body1'>{ product.titulo }</Typography>
-
-                        {/*  Condicional: que haya usuarios qu eno puedan añadir ni borrar esos elementos*/}
-                        {
-                            editable
-                            ? <ItemCounter 
-                                    currentValue={product.cantidad}
-                                    updatedQuantity={( newValue )=> onNewCartQuantityValue( product, newValue )}
+                                : <Typography variant='h5' >{ product.cantidad } { product.cantidad>1 ? 'productos' : 'producto'}</Typography>
+                            }
                             
-                            />
-                            : <Typography variant='h5' >{ product.cantidad } { product.cantidad>1 ? 'productos' : 'producto'}</Typography>
+                        </Box>
+                    </Grid>
+                    <Grid item xs={2} display='flex' alignItems='center' flexDirection='column' >
+                        <Typography variant='subtitle1'>{ `${product.precio}€`}</Typography>
+
+                        {/* editable */}
+                        {
+                            editable && (
+                                <Button 
+                                    onClick={ () => eliminarCarritoProducto( product )}
+                                    variant='text' 
+                                    color='secondary'
+                                    >
+                                    Eliminar artículo
+                                </Button>
+                            )
                         }
                         
-                    </Box>
+                    </Grid>
                 </Grid>
-                <Grid item xs={2} display='flex' alignItems='center' flexDirection='column' >
-                    <Typography variant='subtitle1'>{ `${product.precio}€`}</Typography>
 
-                    {/* editable */}
-                    {
-                        editable && (
-                            <Button 
-                                onClick={ () => eliminarCarritoProducto( product )}
-                                variant='text' 
-                                color='secondary'
-                                >
-                                Eliminar artículo
-                            </Button>
-                        )
-                    }
-                    
-                </Grid>
-            </Grid>
-
-        ))
-      }
-    </Fragment>
+            ))
+        }
+        </Fragment>
   )
 }
 

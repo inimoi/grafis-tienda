@@ -1,9 +1,9 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { NextPage } from 'next'
 import { useRouter } from 'next/router';
 import NextLink from 'next/link'
 
-import { Button, Card, CardContent, Divider, Grid, Typography } from '@mui/material';
+import { Button, Card, CardContent, Chip, Divider, Grid, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 
 import { CarritoList, PedidoResumen } from '../../components/cart';
@@ -17,7 +17,11 @@ const ResumenTotalPedidoPage : NextPage = () => {
 
   const router = useRouter();
 
-  const { shippingAddress, numberOfItems } = useContext(CarritoContext);
+  const { shippingAddress, numberOfItems, createPedido } = useContext(CarritoContext);
+
+  //Para evitar la doble peticion del pedido 
+
+
 
   //useEffect para evitar entrr en la pagina sin que haya direccion
   useEffect(() => {
@@ -25,6 +29,27 @@ const ResumenTotalPedidoPage : NextPage = () => {
       router.push('/checkout/direccion')
     }
   }, [ router ]);
+
+  //Crear dos estados para evitar el doble posteo en el pedido --323
+  const [isPosting, setIsPosting] = useState(false);  //nos ayuda para saber cuando hacemos el posteo en la aplicacion
+  const [errorMessage, setErrorMessage] = useState('');
+
+
+  const onCreatePedido = async () => {
+
+    setIsPosting(true);
+
+    const { hasError, message} = await createPedido();
+
+    if ( hasError ) {
+      setIsPosting(false);
+      setErrorMessage( message );
+      return;
+    }
+    
+    router.replace(`/pedidos/${ message }`)
+  }
+
 
 
   if (!shippingAddress) {
@@ -75,10 +100,22 @@ const ResumenTotalPedidoPage : NextPage = () => {
                     </Box>
                     <PedidoResumen />
 
-                    <Box sx={{ mt:3 }}>
-                        <Button color='secondary' className='circular-btn' fullWidth>
+                    <Box sx={{ mt:3 }} display="flex" flexDirection="column" >
+                        <Button 
+                          color='secondary' 
+                          className='circular-btn' 
+                          fullWidth
+                          onClick={ onCreatePedido }
+                          disabled= { isPosting }
+                          >
                             Cofirmar pedido
                         </Button>
+
+                        <Chip
+                          color="error"
+                          label={ errorMessage }
+                          sx={{ display: errorMessage ? 'flex':'none', mt:2}}
+                        />
 
                     </Box>
                 </CardContent>

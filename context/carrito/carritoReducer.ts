@@ -1,6 +1,6 @@
 
-import { CarritoState, ShippingAddress } from './';
-import { ICarritoProduct } from '../../interfaces';
+import { CarritoState} from './';
+import { ICarritoProduct, ShippingAddress} from '../../interfaces';
 
 
 
@@ -21,6 +21,8 @@ type CarritoActionType =
 
         }
     }
+    // nueva accion para limpiar el carrito cuando el pedido es ok
+    | { type: '[Carrito] - Order Complete' }
 
 
 export const carritoReducer = ( state: CarritoState, action: CarritoActionType ): CarritoState => {
@@ -72,7 +74,17 @@ export const carritoReducer = ( state: CarritoState, action: CarritoActionType )
             return {
                 ...state,
                 shippingAddress: action.payload
-            }        
+            }  
+        
+        case '[Carrito] - Order Complete':
+            return {
+                ...state,
+                carrito: [],
+                numberOfItems: 0,
+                subTotal: 0,
+                impuesto: 0,
+                total: 0,
+            }
         
         default:
             return state

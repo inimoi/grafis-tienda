@@ -1,80 +1,104 @@
+import React from 'react'
+import { GetServerSideProps } from 'next'
+import { NextPage } from 'next'
+import NextLink from 'next/link'
+import { getSession } from 'next-auth/react';
+
 import { CreditCardOffOutlined, CreditScoreOutlined } from '@mui/icons-material';
 import { Button, Card, CardContent, Chip, Divider, Grid, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import { NextPage } from 'next'
-import NextLink from 'next/link'
-import React from 'react'
+
 import { CarritoList, PedidoResumen } from '../../components/cart';
 import { ShopLayout } from '../../components/layouts/ShopLayout';
+import { dbPedidos } from '../../database';
+import { IPedido } from '../../interfaces/pedido';
 
-const PedidoPagoPage : NextPage = () => {
+
+
+//interfaces de las props
+interface Props {
+  pedido: IPedido
+}
+
+const PedidoPagoPage : NextPage<Props> = ( { pedido } ) => {
+
+  const { shippingAddress } = pedido;
+
   return (
-    <ShopLayout title='Pedido ABC123' pageDescription='Resumen total de la compra'>
-      <Typography variant='h1' component='h1'>Pedido ABC123</Typography>
-
-      {/* <Chip 
-        sx={{ mt: 2 }}
-        label="Pendiente de pago"
-        variant='outlined'
-        color='error'
-        icon={ <CreditCardOffOutlined />}
+    <ShopLayout title='Resumen del pedido' pageDescription='Resumen total de la compra'>
+      <Typography variant='h1' component='h1'>Pedido { pedido._id }</Typography>
       
-      /> */}
-      <Chip 
-        sx={{ mt: 2 }}
-        label="Pedido pagado"
-        variant='outlined'
-        color='success'
-        icon={ <CreditScoreOutlined />}
-      
-      />
+      {
+        pedido.isPaid
+        ? (
+            <Chip 
+              sx={{ mt: 2 }}
+              label="Pedido pagado"
+              variant='outlined'
+              color='success'
+              icon={ <CreditScoreOutlined />}
 
-      <Grid container sx={{ mt: 5}} spacing={10}>
+            />
+        ):
+        (
+          <Chip 
+            sx={{ mt: 2 }}
+            label="Pendiente de pago"
+            variant='outlined'
+            color='error'
+            icon={ <CreditCardOffOutlined />}
+          
+          /> 
+        )
+      }
+
+
+      <Grid container sx={{ mt: 5}} spacing={10} className='fadeIn'>
         <Grid item xs={ 12 } sm={ 7}>
-            <CarritoList />
+            <CarritoList productos={ pedido.pedidoItems } />
         </Grid>
 
         <Grid item xs={ 12 } sm={ 5 } >
             <Card>
                 <CardContent>
-                    <Typography variant='h2' >Resumen (3 productos)</Typography>
+                    <Typography variant='h2' >Resumen ({ pedido.numberOfItems} { pedido.numberOfItems > 1 ? 'productos': 'producto'})</Typography>
                     <Divider sx={{ my:1 }} />
 
                     <Box display='flex' justifyContent='space-between'>
-                      <Typography variant='subtitle1'>Dirección de entrega</Typography>
-                      <NextLink href='/checkout/direccion' passHref >
-                        <Box color='secondary' >
-                          Editar
-                        </Box>
-                      </NextLink>
+                      <Typography variant='subtitle1'>Dirección de entrega</Typography>                      
                     </Box>
 
-                    <Typography>Iñigo Miranda</Typography>
-                    <Typography>Algun lugar</Typography>
-                    <Typography>direccion</Typography>
-                    <Typography>ccaa</Typography>
-                    <Typography>Iñigo Miranda</Typography>
+                    <Typography>{ shippingAddress.nombre } { shippingAddress.apellido }</Typography>
+                    <Typography>{ shippingAddress.direccion} { shippingAddress.direccion2 ? `${ shippingAddress.direccion2}`: ''}</Typography>
+                    <Typography>{ shippingAddress.ciudad }</Typography>
+                    <Typography>{ shippingAddress.provincia }</Typography>
+                    <Typography>{ shippingAddress.telefono }</Typography>
 
                     <Divider sx={{ my:1 }} />
-                    <Box display='flex' justifyContent='space-between'>
-                      <Typography variant='subtitle1'>Productos</Typography>
-                      <NextLink href='/carrito' passHref >
-                        <Box color='secondary' >
-                          Editar
-                        </Box>
-                      </NextLink>
-                    </Box>
-                    <PedidoResumen />
+                    
+                    <PedidoResumen 
+                      pedidoValues={{
+                        numberOfItems: pedido.numberOfItems,
+                        subTotal: pedido.subTotal,
+                        total: pedido.total,
+                        impuesto: pedido.impuesto,
+                    }}/>
 
-                    <Box sx={{ mt:3 }}>
-                        <h1>Pagar</h1>
-                        <Chip 
-                            sx={{ mt: 2 }}
-                            label="Pedido pagado"
-                            variant='outlined'
-                            color='success'
-                            icon={ <CreditScoreOutlined />}      
-                        />
+                    <Box sx={{ mt:3 }} display="flex" flexDirection="column">
+                        {
+                          pedido.isPaid
+                          ? (
+                            <Chip 
+                                sx={{ mt: 2 }}
+                                label="Pedido pagado"
+                                variant='outlined'
+                                color='success'
+                                icon={ <CreditScoreOutlined />}      
+                            />
+                          ):(
+                              <h1>Pagar</h1>
+                          )
+                        }
                     </Box>
                 </CardContent>
             </Card>
@@ -84,6 +108,56 @@ const PedidoPagoPage : NextPage = () => {
       </Grid>
     </ShopLayout>
   )
+}
+
+//trabajaremos del lado del servidor SSP
+
+
+export const getServerSideProps: GetServerSideProps = async ({ req, query}) => {
+  
+  //es el id que viene en la barra de direcciones
+  const { id = '' } = query;
+
+  //validaciones
+  //validacion si está autenticado
+  const session:any = await getSession({ req })
+
+  if ( !session ) {
+    return {
+      redirect: {
+        destination: `/auth/login?p=/pedidos/${ id }`,
+        permanent: false,
+      }
+    }
+  }
+
+  //creamos una fucncion y hacemos llamar a dbPedidos nuestra funcion
+  const pedido = await dbPedidos.getPedidoById( id.toString() );
+
+  if ( !pedido ) {
+    return {
+      redirect: {
+        destination: '/pedidos/historialpedidos',
+        permanent: false,
+      }
+    }
+  }
+
+  //ahora validamos que el usuario del pedido sea igual que le de la sesison
+  if ( pedido.user !== session.user._id ) {
+    return {
+      redirect: {
+        destination: '/pedidos/historialpedidos',
+        permanent: false,
+      }
+    }
+  }
+
+  return {
+    props: {
+      pedido
+    }
+  }
 }
 
 export default PedidoPagoPage

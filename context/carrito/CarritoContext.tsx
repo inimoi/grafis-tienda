@@ -1,6 +1,6 @@
 import { createContext } from 'react';
-import { ICarritoProduct } from '../../interfaces';
-import { ShippingAddress } from './';
+import { ICarritoProduct, ShippingAddress } from '../../interfaces';
+
 
 
 interface ContextProps {
@@ -18,7 +18,11 @@ interface ContextProps {
     addProductToCarrito: ( product: ICarritoProduct)=> void;
     updateCarritoCantidad: ( product: ICarritoProduct) => void;
     eliminarCarritoProducto: ( product: ICarritoProduct) => void;
-    updateAddress: (address: ShippingAddress) => void
+    updateAddress: (address: ShippingAddress) => void;
+
+    //pedidos
+    createPedido: () => Promise<{ hasError: boolean, message: string }>;
+
 }
 
 

@@ -2,7 +2,7 @@
 
 export interface ICarritoProduct {
     _id: string;
-    imagenes: string;
+    image: string;
     precio: number;
     slug: string;
     titulo: string;

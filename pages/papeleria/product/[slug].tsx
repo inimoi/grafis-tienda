@@ -31,7 +31,7 @@ const ProductPage: NextPage<Props> = ({ product }) => {
 
   const [ tempCarritoProduct, setTempCarritoProduct ] = useState<ICarritoProduct>({
     _id: product._id,
-    imagenes: product.imagenes[0],
+    image: product.imagenes[0],
     precio: product.precio,
     slug: product.slug,
     titulo: product.titulo,

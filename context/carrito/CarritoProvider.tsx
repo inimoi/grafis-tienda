@@ -1,9 +1,13 @@
 
 import { FC, useEffect, useReducer} from 'react';
 import Cookies from 'js-cookie';  //sale un error por el tipado de Typescript
+import axios from 'axios';
 
-import { ICarritoProduct } from '../../interfaces';
+import { ICarritoProduct, IPedido, ShippingAddress } from '../../interfaces';
 import { CarritoContext, carritoReducer} from './';
+import { grafisApi } from '../../api';
+import { Cookie } from '@mui/icons-material';
+
 
 
 
@@ -23,18 +27,6 @@ interface Props{
     children: React.ReactNode;
 }
 
-//interfcae para guardar los dtos de la direccion
-export interface ShippingAddress {
-    nombre: string;
-    apellido: string;
-    direccion: string;
-    direccion2?: string;
-    codigoPostal: string;
-    ciudad: string;
-    provincia: string;
-    telefono: string;
-
-}
 
 
 const CARRITO_INITIAL_STATE: CarritoState = {
@@ -164,6 +156,59 @@ export const CarritoProvider: FC<Props> = ({ children }) => {
     }
  
 
+    //creacion del pedido
+    const createPedido = async():Promise<{ hasError: boolean, message: string }> => {
+
+        //validacion del shippingadres
+        if ( !state.shippingAddress ) {
+            throw new Error('No hay dirección de entrega');
+        }
+
+        //creacion del cuerpo de la peticion http al backen, la información que va a llegar al backend
+        const body:IPedido = {
+            pedidoItems: state.carrito,
+            shippingAddress: state.shippingAddress,
+            numberOfItems: state.numberOfItems,
+            subTotal: state.subTotal,
+            impuesto: state.impuesto,
+            total: state.total,
+            isPaid: false,
+            
+        }
+
+
+
+        try {
+            
+            const { data } = await grafisApi.post<IPedido>('/pedidos', body);          
+            
+            //Dispatch de la accion Order Complete para borar el carrito y demas
+            dispatch({ type: '[Carrito] - Order Complete'});
+            //como no se me termina de vaciar el carrito le añado
+            Cookies.set("carrito", JSON.stringify([]));
+
+            return {
+                hasError: false,
+                message: data._id!
+            }
+
+
+        } catch (error) {
+            if ( axios.isAxiosError(error)) {
+                return {
+                    hasError: true,
+                    message: error.response?.data.message
+                }
+            }
+
+            return {
+                hasError: true,
+                message: 'Error no controlado, hable con el administrador'
+            }
+        }
+    }
+
+
     return (
         <CarritoContext.Provider value={{
              ...state,   
@@ -173,6 +218,9 @@ export const CarritoProvider: FC<Props> = ({ children }) => {
              updateCarritoCantidad,
              eliminarCarritoProducto,
              updateAddress,
+
+             //pedidos
+             createPedido,
         }}>
             { children }
         </CarritoContext.Provider>    
