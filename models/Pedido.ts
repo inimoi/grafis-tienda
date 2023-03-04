@@ -32,6 +32,12 @@ const pedidoSchema = new Schema(
 
         isPaid: {type: Boolean, required: true },
         paidAt: { type: String },
+
+        //campo añadido para tener una realcion con el metodo de pago, paypal o el que sea
+        transactionId: { type: String },
+
+
+
     },        
     
     {

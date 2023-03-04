@@ -65,6 +65,9 @@ const createPedido = async (req: NextApiRequest, res: NextApiResponse<Data>) => 
         //Si va todo bien
         const userId = session.user._id;
         const newPedido = new Pedido({ ...req.body, isPaid: false, user: userId });      //Pedido de los models, creamos el pedido 
+        //ponemso dos decimales al total
+        newPedido.total = Math.round( newPedido.total * 100 ) / 100;
+
         await newPedido.save();    //grabamos el pedido en la BBDD
         await db.disconnect();
 

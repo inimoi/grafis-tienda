@@ -71,7 +71,7 @@ export const CarritoList:FC<Props> = ({ editable = false, productos }) => {
                         {
                             editable && (
                                 <Button 
-                                    onClick={ () => eliminarCarritoProducto( product )}
+                                    onClick={ () => eliminarCarritoProducto( product as ICarritoProduct)}
                                     variant='text' 
                                     color='secondary'
                                     >

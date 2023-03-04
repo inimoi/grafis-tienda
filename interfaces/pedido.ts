@@ -19,6 +19,8 @@ export interface IPedido {
 
     isPaid: boolean;
     paidAt?: string;
+
+    transactionId?: string;
 }
 
 
