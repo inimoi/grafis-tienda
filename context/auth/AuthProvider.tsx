@@ -6,7 +6,7 @@ import { useSession, signOut } from 'next-auth/react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-import { grafisApi } from '../../api';
+import { grafisApi } from '../../apiConfig';
 import { IUser } from '../../interfaces';
 import { AuthContext, authReducer } from './';
 

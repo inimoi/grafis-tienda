@@ -9,7 +9,7 @@ import { Box, Button, Chip, Grid, TextField, Typography } from '@mui/material'
 import AuthLayout from '../../components/layouts/AuthLayout'
 import { useForm } from 'react-hook-form'
 import { validations } from '../../utils'
-import { grafisApi } from '../../api'
+import { grafisApi } from '../../apiConfig'
 import { ErrorOutline } from '@mui/icons-material'
 import { AuthContext } from '../../context'
 

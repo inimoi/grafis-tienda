@@ -5,7 +5,7 @@ import axios from 'axios';
 
 import { ICarritoProduct, IPedido, ShippingAddress } from '../../interfaces';
 import { CarritoContext, carritoReducer} from './';
-import { grafisApi } from '../../api';
+import { grafisApi } from '../../apiConfig';
 import { Cookie } from '@mui/icons-material';
 
 
