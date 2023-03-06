@@ -5,12 +5,18 @@ import { signIn, getSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import NextLink from 'next/link'
 
-import { Box, Button, Chip, Grid, TextField, Typography } from '@mui/material'
+import { Box } from '@mui/material'
+import { Button } from '@mui/material'
+import { Chip } from '@mui/material'
+import { Grid } from '@mui/material'
+import { TextField } from '@mui/material'
+import { Typography } from '@mui/material'
+import { ErrorOutline } from '@mui/icons-material'
+
 import AuthLayout from '../../components/layouts/AuthLayout'
 import { useForm } from 'react-hook-form'
 import { validations } from '../../utils'
 import { grafisApi } from '../../apiConfig'
-import { ErrorOutline } from '@mui/icons-material'
 import { AuthContext } from '../../context'
 
 

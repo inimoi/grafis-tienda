@@ -1,7 +1,10 @@
 import React from 'react'
-import { ShopLayout } from '../components/layouts/ShopLayout';
-import { Typography } from '@mui/material';
+
 import { NextPage } from 'next';
+
+import { Typography } from '@mui/material';
+
+import { ShopLayout } from '../components/layouts/ShopLayout';
 
 const contacto:NextPage = () => {
   return (

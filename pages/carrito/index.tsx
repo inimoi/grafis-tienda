@@ -2,8 +2,13 @@ import React, { useContext, useEffect } from 'react'
 import { NextPage } from 'next'
 import { useRouter } from 'next/router';
 
-import { Button, Card, CardContent, Divider, Grid, Typography } from '@mui/material';
-import { Box } from '@mui/system';
+import { Button } from '@mui/material';
+import { Card } from '@mui/material';
+import { CardContent } from '@mui/material';
+import { Divider } from '@mui/material';
+import { Grid } from '@mui/material';
+import { Typography } from '@mui/material';
+import { Box } from '@mui/material';
 
 import { CarritoList, PedidoResumen } from '../../components/cart';
 import { ShopLayout } from '../../components/layouts/ShopLayout';

@@ -3,8 +3,14 @@ import { NextPage } from 'next'
 import { useRouter } from 'next/router';
 import NextLink from 'next/link'
 
-import { Button, Card, CardContent, Chip, Divider, Grid, Typography } from '@mui/material';
-import { Box } from '@mui/system';
+import { Button } from '@mui/material';
+import { Card } from '@mui/material';
+import { CardContent } from '@mui/material';
+import { Chip } from '@mui/material';
+import { Divider } from '@mui/material';
+import { Grid } from '@mui/material';
+import { Typography } from '@mui/material';
+import { Box } from '@mui/material';
 
 import { CarritoList, PedidoResumen } from '../../components/cart';
 import { ShopLayout } from '../../components/layouts/ShopLayout';

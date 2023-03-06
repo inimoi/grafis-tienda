@@ -1,7 +1,10 @@
 import '../styles/globals.css'
 import type { AppProps } from 'next/app'
 import { SessionProvider } from "next-auth/react"
-import { CssBaseline, ThemeProvider } from '@mui/material'
+
+import { CssBaseline } from '@mui/material'
+import { ThemeProvider } from '@mui/material'
+
 import { lightTheme } from '../themes/light-theme';
 import { SWRConfig } from 'swr';
 import { UiProvider, CarritoProvider, AuthProvider } from '../context';

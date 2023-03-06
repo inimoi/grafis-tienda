@@ -1,9 +1,12 @@
 import React from 'react'
 import { NextPage } from 'next';
-import NextLink from 'next/link'
-import { ShopLayout } from '../../components/layouts/ShopLayout';
-import { Box, Typography } from '@mui/material';
+import NextLink from 'next/link';
+
+import { Box } from '@mui/material';
+import { Typography } from '@mui/material';
 import { RemoveShoppingCartOutlined } from '@mui/icons-material';
+
+import { ShopLayout } from '../../components/layouts/ShopLayout';
 
 const CarritoVacioPage: NextPage= () => {
   return (

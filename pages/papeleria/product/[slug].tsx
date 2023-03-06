@@ -4,11 +4,13 @@ import { NextPage } from 'next';
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { useRouter } from 'next/router';
 
+import { Grid } from '@mui/material';
+import { Box } from '@mui/material';
+import { Typography } from '@mui/material';
+import { Button } from '@mui/material';
+import { Chip } from '@mui/material';
+
 import { CarritoContext } from '../../../context/carrito/CarritoContext';
-
-import { Grid, Box, Typography, Button, Chip } from '@mui/material';
-
-
 import { ShopLayout } from '../../../components/layouts/ShopLayout';
 import { ProductSlideshow } from '../../../components/products';
 import { ItemCounter } from '../../../components/ui';

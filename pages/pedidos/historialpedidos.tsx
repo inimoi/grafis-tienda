@@ -4,8 +4,14 @@ import { NextPage } from 'next'
 import Nextlink from 'next/link';
 import { getSession } from 'next-auth/react';
 
-import { Box, Chip, Grid, Typography } from '@mui/material';
-import { DataGrid, GridColDef, GridRenderCellParams, GridValueGetterParams } from '@mui/x-data-grid';
+import { Box } from '@mui/material';
+import { Chip } from '@mui/material';
+import { Grid } from '@mui/material';
+import { Typography } from '@mui/material';
+import { DataGrid } from '@mui/x-data-grid';
+import { GridColDef } from '@mui/x-data-grid';
+import { GridRenderCellParams } from '@mui/x-data-grid';
+import { GridValueGetterParams } from '@mui/x-data-grid';
 
 import { ShopLayout } from '../../components/layouts/ShopLayout';
 import { dbPedidos } from '../../database';
