@@ -7,7 +7,7 @@ import NextLink from 'next/link'
 
 import { Box } from '@mui/material'
 import { Button } from '@mui/material'
-import { Chip } from '@mui/material'
+
 import { Grid } from '@mui/material'
 import { TextField } from '@mui/material'
 import { Typography } from '@mui/material'
@@ -68,13 +68,13 @@ const RegistroPage: NextPage = () => {
 
     return (
         <AuthLayout title={'Ingresar'}>
-                <Chip 
+                {/* <Chip 
                     label="No reconocemos ese usuario / contraseña"
                     color='error'
                     icon={ <ErrorOutline />}
                     className='fadeIn'
                     sx={{ display: showError ? 'flex': 'none'}}
-                />
+                /> */}
             <form onSubmit={ handleSubmit( onRegisterForm ) } noValidate> 
                 <Box sx={{ width: '350px', padding:'10px 20px'}}>
                     <Grid container spacing={ 2 } >

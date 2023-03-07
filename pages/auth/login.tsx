@@ -7,7 +7,7 @@ import { signIn, getSession, getProviders } from 'next-auth/react'
 import NextLink from 'next/link'
 import { Box} from '@mui/material'
 import { Button } from '@mui/material'
-import { Chip } from '@mui/material'
+
 import { Divider } from '@mui/material'
 import { Grid } from '@mui/material'
 import { TextField } from '@mui/material'
@@ -84,13 +84,13 @@ const LoginPage: NextPage = () => {
                     <Grid container spacing={ 2 }>
                         <Grid item xs={12}>
                             <Typography variant='h1' component='h1'>Iniciar sesión</Typography>
-                            <Chip 
+                            {/* <Chip 
                                 label="No reconocemos ese usuario / contraseña"
                                 color='error'
                                 icon={ <ErrorOutline />}
                                 className='fadeIn'
                                 sx={{ display: showError ? 'flex': 'none'}}
-                            />
+                            /> */}
                         </Grid>
                         <Grid item xs={12}>
                             <TextField 
