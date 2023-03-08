@@ -117,11 +117,11 @@ const ResumenTotalPedidoPage : NextPage = () => {
                             Cofirmar pedido
                         </Button>
 
-                        <Chip
+                        {/* <Chip
                           color="error"
                           label={ errorMessage }
                           sx={{ display: errorMessage ? 'flex':'none', mt:2}}
-                        />
+                        /> */}
 
                     </Box>
                 </CardContent>

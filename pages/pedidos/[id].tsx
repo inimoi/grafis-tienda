@@ -35,7 +35,7 @@ const PedidoPagoPage : NextPage<Props> = ( { pedido } ) => {
     <ShopLayout title='Resumen del pedido' pageDescription='Resumen total de la compra'>
       <Typography variant='h1' component='h1'>Pedido { pedido._id }</Typography>
       
-      {
+      {/* {
         pedido.isPaid
         ? (
             <Chip 
@@ -57,7 +57,7 @@ const PedidoPagoPage : NextPage<Props> = ( { pedido } ) => {
           
           /> 
         )
-      }
+      } */}
 
 
       <Grid container sx={{ mt: 5}} spacing={10} className='fadeIn'>
@@ -92,7 +92,7 @@ const PedidoPagoPage : NextPage<Props> = ( { pedido } ) => {
                     }}/>
 
                     <Box sx={{ mt:3 }} display="flex" flexDirection="column">
-                        {
+                        {/* {
                           pedido.isPaid
                           ? (
                             <Chip 
@@ -105,7 +105,7 @@ const PedidoPagoPage : NextPage<Props> = ( { pedido } ) => {
                           ):(
                               <h1>Pagar</h1>
                           )
-                        }
+                        } */}
                     </Box>
                 </CardContent>
             </Card>
