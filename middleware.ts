@@ -7,7 +7,7 @@ import { getToken } from 'next-auth/jwt'
 export async function middleware(req: NextRequest) {
 
   //trae el token de next-auth
- const session = await getToken({ req, secret: process.env.NEXTAUTH_URL })
+ const session = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
  
  //informacion util sobre el usuario
  if ( !session ) {
