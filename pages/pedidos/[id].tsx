@@ -1,12 +1,15 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { GetServerSideProps } from 'next'
 import { NextPage } from 'next'
 import NextLink from 'next/link'
 import { getSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
+
+import { PayPalButtons} from '@paypal/react-paypal-js';
 
 import { CreditCardOffOutlined } from '@mui/icons-material';
 import { CreditScoreOutlined } from '@mui/icons-material';
-import { Button } from '@mui/material';
+import { Button, CircularProgress } from '@mui/material';
 import { Card } from '@mui/material';
 import { CardContent } from '@mui/material';
 import { Chip } from '@mui/material';
@@ -19,8 +22,15 @@ import { CarritoList, PedidoResumen } from '../../components/cart';
 import { ShopLayout } from '../../components/layouts/ShopLayout';
 import { dbPedidos } from '../../database';
 import { IPedido } from '../../interfaces/pedido';
+import { grafisApi } from '../../apiConfig';
 
 
+
+//el tipo de paypal del OrderresonseBody
+export type OrderResponseBody = {
+  id: string;
+  status: "COMPLETED" | "SAVED" | "APPROVED" | "VOIDED" | "PAYER_ACTION_REQUIRED";
+   };
 
 //interfaces de las props
 interface Props {
@@ -29,13 +39,50 @@ interface Props {
 
 const PedidoPagoPage : NextPage<Props> = ( { pedido } ) => {
 
+  const router = useRouter();
+
   const { shippingAddress } = pedido;
+
+  //estado para condicionar el circular progress o los botones de paypal
+  const [ isPaying, setIsPaying ] = useState(false);
+
+
+
+  //actualizar pantalla e pasgo cuando se ha pagado
+  const onOrderCompleted = async ( details: OrderResponseBody ) => {
+
+    if ( details.status !== 'COMPLETED') {
+      return alert('No hay pago en PayPal');
+    }
+
+    setIsPaying( true );
+
+    try {
+      const { data } = await grafisApi.post(`/pedidos/pay`, {
+          transactionId: details.id,
+          pedidoId: pedido._id,
+
+      })
+      //si sale todo bien recargamos la pagina
+      router.reload();
+
+    } catch (error) {
+      setIsPaying( false);
+      alert('error');
+    }
+
+
+
+}
+
+
+
 
   return (
     <ShopLayout title='Resumen del pedido' pageDescription='Resumen total de la compra'>
       <Typography variant='h1' component='h1'>Pedido { pedido._id }</Typography>
       
-      {/* {
+      {
         pedido.isPaid
         ? (
             <Chip 
@@ -57,7 +104,7 @@ const PedidoPagoPage : NextPage<Props> = ( { pedido } ) => {
           
           /> 
         )
-      } */}
+      } 
 
 
       <Grid container sx={{ mt: 5}} spacing={10} className='fadeIn'>
@@ -92,20 +139,56 @@ const PedidoPagoPage : NextPage<Props> = ( { pedido } ) => {
                     }}/>
 
                     <Box sx={{ mt:3 }} display="flex" flexDirection="column">
-                        {/* {
-                          pedido.isPaid
-                          ? (
-                            <Chip 
-                                sx={{ mt: 2 }}
-                                label="Pedido pagado"
-                                variant='outlined'
-                                color='success'
-                                icon={ <CreditScoreOutlined />}      
-                            />
-                          ):(
-                              <h1>Pagar</h1>
-                          )
-                        } */}
+                        
+                        {/* Para cuando estamos esperando la respuesta del backen para ver si se ha pagado */}
+                        <Box display="flex" 
+                            justifyContent="center" 
+                            className='fadeIn' 
+                            sx={{ display: isPaying ? 'flex': 'none'}}>
+                          <CircularProgress />
+                        </Box>
+                        
+                        <Box flexDirection='column' sx={{ display: isPaying ? 'none': 'flex', flex: 1}}>
+
+                          {
+                            pedido.isPaid
+                            ? (
+                              <Chip 
+                                  sx={{ mt: 2 }}
+                                  label="Pedido pagado"
+                                  variant='outlined'
+                                  color='success'
+                                  icon={ <CreditScoreOutlined />}      
+                              />
+                            ):(
+                                <PayPalButtons 
+                                
+                                  createOrder={(data, actions) => {
+                                      return actions.order.create({
+                                          purchase_units: [
+                                              {
+                                                  amount: {
+                                                      value: `${pedido.total}`, 
+                                                  },
+                                              },
+                                          ],
+                                      });
+                                  }}
+                                  onApprove={(data, actions) => {
+                                    
+                                      return actions.order!.capture().then((details) => {
+                                        /* console.log( { details })
+                                        //aqui hacemos nuestra verificacion con nuestro backend
+                                        const name = details.payer.name!.given_name;
+                                          //alert(`Transaction completed by ${name}`); */
+                                        onOrderCompleted( details );
+                                      });
+                                  }}
+                            
+                                />
+                            )
+                          }
+                        </Box>
                     </Box>
                 </CardContent>
             </Card>
