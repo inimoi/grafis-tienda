@@ -21,6 +21,9 @@ export interface IPedido {
     paidAt?: string;
 
     transactionId?: string;
+
+    createdAt?: string;
+    updatedAt?: string;
 }
 
 
