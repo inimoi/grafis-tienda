@@ -1,4 +1,4 @@
-import { MenuHTMLAttributes } from "react";
+
 import { IUser } from "./";
 
 

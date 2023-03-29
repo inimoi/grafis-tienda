@@ -15,6 +15,13 @@ export const getProductBySlug = async (slug: string): Promise<IProduct | null> =
         return null
     }
 
+
+    //un processamiento delas imagenes cuando las subamos al server
+    product.imagenes = product.imagenes.map( image => {
+        return image
+    })
+    
+
     return JSON.parse(JSON.stringify( product ))
 }
 
@@ -47,7 +54,17 @@ export const getProductByTerm = async ( term: string): Promise<IProduct[]> => {
 
     await db.disconnect();
 
-    return products;
+    //un processamiento delas imagenes cuando las subamos al server
+    const updatedProducts = products.map( product => {
+        product.imagenes = product.imagenes.map( image => {
+            return image
+        })
+        
+        return product;
+    })
+
+
+    return updatedProducts;
 }
 
 
@@ -58,6 +75,15 @@ export const getAllProducts = async ():Promise<IProduct[]> => {
 
     await db.disconnect();
 
-    return JSON.parse(JSON.stringify( products ))
+    //un processamiento delas imagenes cuando las subamos al server
+    const updatedProducts = products.map( product => {
+        product.imagenes = product.imagenes.map( image => {
+            return image
+        })
+        
+        return product;
+    })
+
+    return JSON.parse(JSON.stringify( updatedProducts ))
 
 }

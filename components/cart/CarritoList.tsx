@@ -5,7 +5,7 @@ import { Box, Button, CardActionArea, CardMedia, Grid, Typography } from '@mui/m
 import { ItemCounter } from '../ui';
 import { CarritoContext } from '../../context/carrito/CarritoContext';
 import { ICarritoProduct } from '../../interfaces';
-import { IPedidoItem } from '../../interfaces/pedido';
+import { IPedidoItem } from '../../interfaces';
 
 
 
@@ -39,7 +39,7 @@ export const CarritoList:FC<Props> = ({ editable = false, productos }) => {
                             <Box>
                                 <CardActionArea>
                                     <CardMedia 
-                                        image={ `/products/${ product.image}`}
+                                        image={ product.image }
                                         component='img'
                                         sx={{ borderRadius: '5px' }}
                                     />
